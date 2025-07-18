@@ -1,103 +1,119 @@
-import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Globe, Heart, Share } from "lucide-react";
+import React from "react";
+import Link from "next/link";
 
-export default function Home() {
+const featureCards = [
+  {
+    icon: <Globe className="w-8 h-8" />,
+    title: "世界中とつながろう",
+    description:
+      "世界中の人々とつながり、国境を越えてあなたのネットワークを広げましょう。",
+    note: "ChatGPT に質問する",
+    bgColor: "bg-slate-100",
+  },
+  {
+    icon: <Share className="w-8 h-8" />,
+    title: "すぐに共有",
+    description:
+      "あなたの考えや写真、体験をフォロワーとリアルタイムで共有しましょう。",
+    note: "ChatGPT に質問する",
+    bgColor: "bg-green-100",
+  },
+  {
+    icon: <Heart className="w-8 h-8" />,
+    title: "つながり続けよう",
+    description:
+      "話題のトピックを見つけ、コンテンツに参加し、自分にとって大切な最新情報を手に入れましょう。",
+    note: "",
+    bgColor: "bg-[#fef3c6]",
+  },
+];
+
+export default function LandingPage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="flex flex-col items-start relative bg-slate-50 min-h-screen">
+      <header className="flex h-20 items-center justify-between px-8 py-0 relative w-full bg-white border border-solid border-slate-200">
+        <div className="flex items-center gap-3">
+          <div className="flex w-10 h-10 items-center justify-center relative bg-[#1d9bf0] rounded-lg">
+            <span className="text-white font-bold text-lg">Kw</span>
+          </div>
+          <span className="text-[#314158] font-bold text-xl">Kwitter</span>
         </div>
+
+        <div className="flex items-center gap-3">
+          <Button asChild className="h-9 bg-[#1d9bf0] text-slate-50 rounded-lg">
+            <Link href="/auth/login">ログイン</Link>
+          </Button>
+          <Button
+            variant="outline"
+            className="h-9 text-[#1d9bf0] border-[#1d9bf0] bg-white rounded-lg"
+          >
+            サインアップ
+          </Button>
+        </div>
+      </header>
+
+      <main className="flex flex-col items-start gap-16 px-8 py-16 relative w-full">
+        <section className="flex flex-col items-center gap-6 relative w-full">
+          <h1 className="[font-family:'Inter-Bold',Helvetica] font-bold text-slate-800 text-5xl leading-[57.6px] text-center">
+            Kitter へようこそ！
+          </h1>
+
+          <p className="[font-family:'Inter-Regular',Helvetica] font-normal text-slate-500 text-lg leading-[21.6px] text-center">
+            あなたの想いを共有し、新たな視点を発見し、世界中の人々と深いつながりを築きましょう。
+          </p>
+
+          <div className="flex items-center gap-4">
+            <Button className="bg-[#1d9bf0] text-white rounded-lg h-auto py-2.5">
+              Get Started
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="bg-white text-[#1d9bf0] border-[#1d9bf0] rounded-lg h-auto py-2.5"
+            >
+              <Link href="/auth/login">ログイン</Link>
+            </Button>
+          </div>
+        </section>
+
+        <section className="flex flex-col items-start gap-8 relative w-full">
+          <h2 className="w-full [font-family:'Inter-Bold',Helvetica] font-bold text-slate-800 text-[32px] text-center leading-[38.4px]">
+            なぜ私たちのSNSを選ぶのか？
+          </h2>
+
+          <div className="flex items-start gap-6 w-full justify-center flex-wrap md:flex-nowrap">
+            {featureCards.map((card, index) => (
+              <Card
+                key={index}
+                className="w-full md:w-[360px] h-auto border-slate-200 rounded-xl"
+              >
+                <CardContent className="flex flex-col items-start gap-4 p-8">
+                  <div
+                    className={`flex w-16 h-16 items-center justify-center rounded-xl ${card.bgColor}`}
+                  >
+                    {card.icon}
+                  </div>
+                  <h3 className="self-stretch [font-family:'Inter-SemiBold',Helvetica] font-semibold text-slate-800 text-xl leading-6">
+                    {card.title}
+                  </h3>
+                  <p className="self-stretch [font-family:'Inter-Regular',Helvetica] font-normal text-slate-500 text-sm leading-[16.8px]">
+                    {card.description}
+                    {card.note && (
+                      <>
+                        <br />
+                        {card.note}
+                      </>
+                    )}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
