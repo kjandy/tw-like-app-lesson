@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,10 +11,27 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function loginPage() {
+  const { signInUser, signInWithGoogle } = useAuth();
+  const router = useRouter();
+
+  // Googleログイン処理
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithGoogle();
+      if (result.success) {
+        router.push("/home");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
   return (
     <div className="flex items-center justify-center min-h-screen">
       <Card className="w-full max-w-md">
@@ -47,8 +66,12 @@ export default function loginPage() {
           </form>
           <Separator className="my-6" />
           <p className="text-center my-6">or</p>
-          <Button asChild variant="outline" className="w-full my-6">
-            <Link href="/home">Continue with Google</Link>
+          <Button
+            onClick={handleGoogleLogin}
+            variant="outline"
+            className="w-full my-6"
+          >
+            Continue with Google
           </Button>
           <div>
             アカウントを持っていませんか？
