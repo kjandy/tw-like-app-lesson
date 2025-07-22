@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { useParams } from "next/navigation";
 // import { mockPosts } from "@/lib/mock-data";
@@ -10,6 +10,7 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import AuthGuard from "@/components/AuthGuard";
+import { usePosts } from "@/lib/posts-context";
 
 export default function PostDetailPage() {
   // コンテキストから全投稿を取得
@@ -63,6 +64,20 @@ export default function PostDetailPage() {
   //   if (diffInDays < 7) return `${diffInDays}d`;
   //   return date.toLocaleDateString();
   // };
+  useEffect(() => {
+    // console.log("useEffect実行: postId=", postId);
+    // console.log("postsの中身:", posts);
+    if (postId && posts.length > 0) {
+      const post = posts.find((p) => String(p.id) === String(postId));
+      // console.log("postの中身:", post);
+      setPostData(post);
+      setLoading(false); // ← ここも忘れずに
+    }
+  }, [postId, posts]);
+
+  if (!postData) {
+    return <p>データがありません</p>;
+  }
 
   return (
     <AuthGuard>
@@ -72,7 +87,7 @@ export default function PostDetailPage() {
             <div className="flex flex-col w-full max-w-4xl items-start gap-6">
               {/* <BackButton /> */}
               {/* Post */}
-              {/* <Post
+              <Post
                 id={postData.id}
                 content={postData.content}
                 authorId={postData.authorId}
@@ -84,8 +99,7 @@ export default function PostDetailPage() {
                 comments={postData.comments}
                 createdAt={postData.createdAt}
                 visibility={postData.visibility}
-              /> */}
-              <Post />
+              />
             </div>
           </div>
           <Navigation />

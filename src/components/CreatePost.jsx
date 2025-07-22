@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ImageIcon, X, Loader2, Globe, Users } from "lucide-react";
-import { useToast } from "@/hook/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth-context"; // 認証情報を取得
 import { usePosts } from "@/lib/posts-context"; // 投稿管理のコンテキストを使用
 import { collection, addDoc } from "firebase/firestore"; // Firestoreのインポート

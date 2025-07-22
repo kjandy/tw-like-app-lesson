@@ -1,8 +1,12 @@
 "use client";
 
+// 他のモジュールやライブラリを読み込んでいます
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// 他のモジュールやライブラリを読み込んでいます
 import { Button } from "@/components/ui/button";
+// 他のモジュールやライブラリを読み込んでいます
 import { useAuth } from "@/lib/auth-context";
+// 他のモジュールやライブラリを読み込んでいます
 import {
   BellIcon,
   HomeIcon,
@@ -11,25 +15,32 @@ import {
   SearchIcon,
   UserIcon,
 } from "lucide-react";
+// 他のモジュールやライブラリを読み込んでいます
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// 他のモジュールやライブラリを読み込んでいます
+import { usePathname, useRouter } from "next/navigation";
+// 他のモジュールやライブラリを読み込んでいます
 import React from "react";
 
 export const Navigation = () => {
   // Navigation menu items data
   const menuItems = [
-    { icon: HomeIcon, label: "ホーム", active: true, url: "/home" },
-    { icon: SearchIcon, label: "検索", active: false, url: "/search" },
-    { icon: BellIcon, label: "通知", active: false, url: "/notifications" },
-    { icon: MailIcon, label: "受信箱", active: false, url: "/messages" },
-    { icon: UserIcon, label: "Profile", active: false, url: "profile" },
+    { icon: HomeIcon, label: "ホーム", url: "/home" },
+    { icon: SearchIcon, label: "検索", url: "/search" },
+    { icon: BellIcon, label: "通知", url: "/notifications" },
+    { icon: MailIcon, label: "受信箱", url: "/messages" },
+    // { icon: UserIcon, label: "Profile", url: "profile" },
   ];
-  const { logout } = useAuth();
+  const { logout, user, userProfile } = useAuth();
   const router = useRouter();
+  // usePathname: 現在のページのパスを取得するNext.jsのフック
+  // 例: "/home"、"/search"など
+  const pathname = usePathname();
   //ログアウト処理の関数
   const handleLogout = async () => {
     try {
-      const result = await logout();
+      // const result = await logout();
+      await logout();
       // if (result.success) {
       //   setTimeout(() => {
       //     // window.location.href = "/";
@@ -41,58 +52,93 @@ export const Navigation = () => {
     } finally {
     }
   };
+  // ここから画面に表示する内容を記述します
   return (
-    <aside className="flex flex-col w-64 items-start gap-6 p-4 relative bg-white border-r border-solid border">
+    <aside className="z-10 w-full md:w-64 fixed md:sticky bottom-0 left-0 right-0 md:top-0 md:bottom-auto md:right-auto flex flex-col items-start md:gap-6 px-4 py-2 md:py-10 bg-white border-r border-solid border">
       {/* Brand/Logo Section */}
-      <div className="flex items-center gap-3 relative self-stretch w-full">
-        <div className="flex w-10 h-10 items-center justify-center relative bg-[#1d9bf0] rounded-lg">
+      <div className="flex items-center justify-center md:justify-start gap-3 relative self-stretch w-full">
+        {/* ロゴ - デスクトップのみ表示 */}
+        {/* hidden md:block: モバイルでは非表示、デスクトップでは表示 */}
+        <div className="z-10 fixed md:relative top-4 md:top-auto flex w-10 h-10 items-center justify-center bg-[#1d9bf0] rounded-lg">
           <span className="font-bold text-white">Kw</span>
         </div>
-        <h1 className="font-bold text-xl text-[#314158]">Kwitter</h1>
+        <h1 className="hidden md:block font-bold text-xl text-[#314158]">
+          Kwitter
+        </h1>
       </div>
 
       {/* Navigation Menu */}
-      <nav className="flex flex-col items-start gap-2 relative self-stretch w-full">
-        {menuItems.map((item, index) => (
-          <Link
-            href={item.url}
-            key={index}
-            className={`flex h-12 items-center gap-3 px-[15px] py-3 relative self-stretch w-full rounded-lg hover:bg-slate-100 ${
-              item.active ? "bg-slate-100" : ""
-            }`}
-          >
-            <div className="inline-flex h-9 items-center justify-center gap-1.5 py-2 relative">
-              <item.icon
-                className={`w-5 h-5 ${
-                  item.active ? "text-[#1d9bf0]" : "text-[#62748e]"
-                }`}
-              />
-              <span
-                className={`font-semibold text-center whitespace-nowrap ${
-                  item.active ? "text-[#1d9bf0]" : "text-[#62748e]"
-                }`}
+      <nav className="flex justify-around md:flex-col items-start gap-2 relative self-stretch w-full">
+        {menuItems.map((item, index) => {
+          // アイコンコンポーネントを取得
+          const Icon = item.icon;
+          // 現在のページかどうかを判定（アクティブ状態）
+          const isActive = pathname === item.url;
+          // ここから画面に表示する内容を記述します
+          return (
+            <Button
+              key={index}
+              asChild
+              variant={isActive ? "default" : "ghost"}
+              className={`flex items-center justify-center md:justify-start w-12 h-12 md:w-full md:h-auto md:px-4 md:py-3 gap-1.5 py-2rounded-lg hover:bg-slate-100 ${
+                isActive ? "bg-slate-100" : ""
+              }`}
+            >
+              <Link
+                href={item.url}
+                className="md:w-full"
+                // className={`flex h-12 items-center gap-3 px-[15px] py-3 relative self-stretch w-full rounded-lg hover:bg-slate-100 ${
+                //   item.active ? "bg-slate-100" : ""
+                // }`}
               >
-                {item.label}
-              </span>
-            </div>
-          </Link>
-        ))}
+                <Icon
+                  className={`w-6 h-6 ${
+                    isActive ? "text-[#1d9bf0]" : "text-[#62748e]"
+                  }`}
+                />
+                <span
+                  className={`hidden md:inline font-semibold text-center whitespace-nowrap ${
+                    isActive ? "text-[#1d9bf0]" : "text-[#62748e]"
+                  }`}
+                >
+                  {item.label}
+                </span>
+              </Link>
+            </Button>
+          );
+        })}
       </nav>
 
       {/* User Profile Section */}
-      <div className="flex flex-col items-start gap-4 pt-4 pb-0 px-0 relative self-stretch w-full">
+      <div className="fixed top-0 left-0 md:relative flex flex-col items-start gap-4 pt-4 pb-4 md:pb-0 px-0 self-stretch w-full bg-white">
         {/* User Info */}
-        <div className="items-center gap-3 self-stretch w-full flex relative">
-          <Avatar className="w-10 h-10">
+        <div className="pl-6 md:pl-0 flex justify-start md:justify-start items-center gap-3 self-stretch w-full relative">
+          {/* <Avatar className="w-10 h-10">
             <AvatarImage src="/avatar-4.png" alt="Koji Ando" />
             <AvatarFallback>KA</AvatarFallback>
-          </Avatar>
+          </Avatar> */}
+          <Link href="/profile">
+            <Avatar className="w-10 h-10">
+              <AvatarImage
+                src={
+                  userProfile?.avatar || user?.photoURL || "/placeholder.svg"
+                }
+              />
+              <AvatarFallback>
+                {userProfile?.name?.charAt(0) ||
+                  user?.displayName?.charAt(0) ||
+                  "U"}
+              </AvatarFallback>
+            </Avatar>
+          </Link>
 
-          <div className="flex-col items-start gap-0.5 flex-1 grow flex relative">
+          <div className="hidden md:flex flex-col items-start gap-0.5 flex-1 grow relative">
             <span className="self-stretch font-semibold text-sm text-[#314158]">
-              Koji Ando
+              {userProfile?.name}
             </span>
-            <span className="self-stretch text-xs text-[#62748e]">@koji</span>
+            <span className="self-stretch text-xs text-[#62748e]">
+              @{userProfile?.username}
+            </span>
           </div>
         </div>
 
@@ -100,10 +146,12 @@ export const Navigation = () => {
         <Button
           onClick={handleLogout}
           variant="ghost"
-          className="flex h-10 items-center justify-center gap-2 p-2 relative self-stretch w-full bg-slate-100 rounded-lg hover:bg-slate-200"
+          className="fixed md:relative top-4 md:top-auto right-4 md:right-auto inline-flex md:flex md:w-full h-10 items-center justify-center gap-2 p-2 self-stretch bg-slate-100 rounded-lg hover:bg-slate-200"
         >
           <LogOutIcon className="w-5 h-5 text-[#62748e]" />
-          <span className="font-semibold text-[#62748e]">ログアウト</span>
+          <span className="hidden md:inline font-semibold text-[#62748e]">
+            ログアウト
+          </span>
         </Button>
       </div>
     </aside>

@@ -12,9 +12,9 @@ export default function HomePage() {
   return (
     <AuthGuard>
       <main className="flex flex-row w-full min-h-screen bg-slate-50">
-        <div className="flex w-full">
-          <Navigation />
+        <div className="flex flex-row-reverse w-full items-start">
           {user && <PostList posts={posts} />}
+          <Navigation />
         </div>
       </main>
     </AuthGuard>
