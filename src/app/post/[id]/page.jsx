@@ -1,62 +1,96 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { useParams } from "next/navigation";
-import { mockPosts } from "@/lib/mock-data";
+// import { mockPosts } from "@/lib/mock-data";
 import { Post } from "@/components/Post";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/lib/auth-context";
+import AuthGuard from "@/components/AuthGuard";
 
 export default function PostDetailPage() {
+  // コンテキストから全投稿を取得
+  const { posts } = usePosts();
   const params = useParams();
   const postId = params.id;
   // 投稿IDが数値であることを確認
-  const post = mockPosts.find((p) => String(p.id) === String(postId));
-  console.log("Post ID:", postId, "Post:", post);
+  // const post = mockPosts.find((p) => String(p.id) === String(postId));
+  // console.log("Post ID:", postId, "Post:", post);
+  const { user, userProfile } = useAuth();
 
-  // createdAtがDateでなかった場合の対処
-  // 文字列や数値からDateオブジェクトに変換する関数
-  // もしDateオブジェクトであればそのまま返す
-  // 文字列や数値であればDateオブジェクトに変換して返す
-  // それ以外の型の場合は現在の日付を返す
-  // これにより、createdAtが常にDateオブジェクトとして扱える
-  const parseDate = (value) => {
-    if (value instanceof Date) return value;
-    if (typeof value === "string" || typeof value === "number")
-      return new Date(value);
-    return new Date();
-  };
+  // State管理
+  const [postData, setPostData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [postLoading, setPostLoading] = useState(true);
+
+  // Firestore Timestampを安全にDateに変換する関数
+  // const convertTimestamp = (timestamp) => {
+  //   if (!timestamp) return null;
+
+  //   // Reactのコンポーネントを定義しています
+  //   if (timestamp && typeof timestamp.toDate === "function") {
+  //     return timestamp.toDate();
+  //   }
+
+  //   if (timestamp instanceof Date) {
+  //     return timestamp;
+  //   }
+
+  //   if (timestamp) {
+  //     const date = new Date(timestamp);
+  //     return isNaN(date.getTime()) ? null : date;
+  //   }
+
+  //   return null;
+  // };
+
+  // 投稿時間の表示用フォーマット
+  // const formatTimestamp = (timestamp) => {
+  //   const date = convertTimestamp(timestamp);
+  //   if (!date) return "now";
+
+  //   const now = new Date();
+  //   const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+  //   const diffInHours = Math.floor(diffInMinutes / 60);
+  //   const diffInDays = Math.floor(diffInHours / 24);
+
+  //   if (diffInMinutes < 1) return "now";
+  //   if (diffInMinutes < 60) return `${diffInMinutes}m`;
+  //   if (diffInHours < 24) return `${diffInHours}h`;
+  //   if (diffInDays < 7) return `${diffInDays}d`;
+  //   return date.toLocaleDateString();
+  // };
+
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Navigation />
-      {/* Post */}
-      <main className="flex-1 pb-16 md:pb-0">
-        <div className="max-w-4xl mx-auto p-4">
-          <div className="flex items-center mb-6">
-            <Link href="/home">
-              <Button variant="ghost" size="sm" className="mr-4">
-                <ArrowLeft className="w-4 h-4" />
-              </Button>
-            </Link>
-            <p className="text-xl font-bold">ホーム</p>
+    <AuthGuard>
+      <main className="flex flex-row w-full min-h-screen bg-slate-50 py-20 md:py-0">
+        <div className="flex flex-row-reverse w-full items-start">
+          <div className="flex flex-col items-start gap-6 p-6 bg-gray-50 flex-1">
+            <div className="flex flex-col w-full max-w-4xl items-start gap-6">
+              {/* <BackButton /> */}
+              {/* Post */}
+              {/* <Post
+                id={postData.id}
+                content={postData.content}
+                authorId={postData.authorId}
+                authorName={postData.authorName}
+                authorUsername={postData.authorUsername}
+                authorAvatar={postData.authorAvatar}
+                images={postData.images}
+                likes={postData.likes}
+                comments={postData.comments}
+                createdAt={postData.createdAt}
+                visibility={postData.visibility}
+              /> */}
+              <Post />
+            </div>
           </div>
-          <Post
-            id={post.id}
-            content={post.content}
-            authorId={post.authorId}
-            authorName={post.authorName}
-            authorUsername={post.authorUsername}
-            authorAvatar={post.authorAvatar}
-            images={post.images}
-            likes={post.likes}
-            comments={post.comments}
-            createdAt={parseDate(post.createdAt)}
-            visibility={post.visibility}
-          />
+          <Navigation />
         </div>
       </main>
-    </div>
+    </AuthGuard>
   );
 }

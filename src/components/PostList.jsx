@@ -12,11 +12,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Heart, MessageCircle, MoreHorizontal } from "lucide-react";
 import React from "react";
 import Link from "next/link";
-import { mockPosts } from "@/lib/mock-data";
+// import { mockPosts } from "@/lib/mock-data";
 import { Post } from "./Post";
 import CreatePost from "./CreatePost";
 
-export const PostList = () => {
+export const PostList = ({ posts }) => {
   return (
     <div className="flex flex-col items-start gap-6 p-6 bg-gray-50 flex-1">
       <div className="flex flex-col w-full max-w-[640px] items-start gap-6">
@@ -40,7 +40,7 @@ export const PostList = () => {
 
           {/* Posts */}
           <div className="flex flex-col items-start gap-4 w-full">
-            {mockPosts.map((post) => (
+            {posts.map((post) => (
               // スプレッド構文でpostオブジェクトの全てのプロパティを展開
               <Post key={post.id} {...post} />
             ))}

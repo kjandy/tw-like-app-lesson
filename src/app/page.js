@@ -1,8 +1,10 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Globe, Heart, Share } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useConter } from "@/lib/count-context";
 
 const featureCards = [
   {
@@ -32,6 +34,7 @@ const featureCards = [
 ];
 
 export default function LandingPage() {
+  const { count } = useConter();
   return (
     <div className="flex flex-col items-start relative bg-slate-50 min-h-screen">
       <header className="flex h-20 items-center justify-between px-8 py-0 relative w-full bg-white border border-solid border-slate-200">
@@ -58,7 +61,7 @@ export default function LandingPage() {
       <main className="flex flex-col items-start gap-16 px-8 py-16 relative w-full">
         <section className="flex flex-col items-center gap-6 relative w-full">
           <h1 className="[font-family:'Inter-Bold',Helvetica] font-bold text-slate-800 text-5xl leading-[57.6px] text-center">
-            Kitter へようこそ！
+            Kitter へようこそ！{count}
           </h1>
 
           <p className="[font-family:'Inter-Regular',Helvetica] font-normal text-slate-500 text-lg leading-[21.6px] text-center">
@@ -75,6 +78,13 @@ export default function LandingPage() {
               className="bg-white text-[#1d9bf0] border-[#1d9bf0] rounded-lg h-auto py-2.5"
             >
               <Link href="/auth/login">ログイン</Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="bg-white text-[#1d9bf0] border-[#1d9bf0] rounded-lg h-auto py-2.5"
+            >
+              <Link href="/notifications">カウンター</Link>
             </Button>
           </div>
         </section>

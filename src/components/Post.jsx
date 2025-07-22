@@ -19,17 +19,30 @@ export const Post = ({
   createdAt, //作成日時
   visibility, //公開設定(etc, Friend Only)
 }) => {
-  // 投稿時間を「○時間前」の形式で表示
-  const formatTimestamp = (date) => {
-    const now = new Date();
-    const diffInHours = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60 * 60)
-    );
+  // 投稿時間の表示用フォーマット
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp) return "now";
 
+    let date;
+    // Firestore Timestampの処理
+    // Reactのコンポーネントを定義しています
+    if (timestamp && typeof timestamp.toDate === "function") {
+      date = timestamp.toDate();
+    } else if (timestamp instanceof Date) {
+      date = timestamp;
+    } else {
+      date = new Date(timestamp);
+    }
+
+    const now = new Date();
+    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+
+    // 時間差に応じて表示形式を変更
     if (diffInHours < 1) return "now";
     if (diffInHours < 24) return `${diffInHours}h`;
     return date.toLocaleDateString();
   };
+
   return (
     <Card className="w-full p-5">
       <div className="flex items-center justify-between">
